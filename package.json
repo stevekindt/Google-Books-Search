@@ -23,12 +23,16 @@
     "url": "https://github.com/stevekindt/Google-Books-Search/issues"
   },
   "homepage": "https://github.com/stevekindt/Google-Books-Search#readme",
+  "devDependencies": {
+    "concurrently": "^4.1.2",
+    "nodemon": "^1.19.4"
+  },
   "dependencies": {
     "axios": "^0.19.2",
-    "bootswatch": "^4.5.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "if-env": "^1.0.4",
-    "moment": "^2.25.3",
+    "mongodb": "^3.5.7",
     "mongoose": "^5.9.14",
     "react": "^16.13.1",
     "react-router-dom": "^5.2.0"
