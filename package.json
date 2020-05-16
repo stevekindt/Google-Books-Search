@@ -1,0 +1,36 @@
+{
+  "name": "google-books-search",
+  "version": "1.0.0",
+  "description": "google books search mern react",
+  "main": "server.js",
+  "scripts": {
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:prod": "node server.js",
+    "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
+    "client": "cd client && npm run start",
+    "seed": "node scripts/seedDB.js",
+    "install": "cd client && npm install",
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stevekindt/Google-Books-Search.git"
+  },
+  "author": "Steve Kindt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stevekindt/Google-Books-Search/issues"
+  },
+  "homepage": "https://github.com/stevekindt/Google-Books-Search#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bootswatch": "^4.5.0",
+    "express": "^4.17.1",
+    "if-env": "^1.0.4",
+    "moment": "^2.25.3",
+    "mongoose": "^5.9.14",
+    "react": "^16.13.1",
+    "react-router-dom": "^5.2.0"
+  }
+}
