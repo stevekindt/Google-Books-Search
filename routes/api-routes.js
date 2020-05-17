@@ -5,7 +5,11 @@ const db = require("../models");
 
 router.get("/books", (req, res) => {
   axios
-    .get("https://www.googleapis.com/books/v1/volumes", { params: req.query })
+    .get(
+      "https://www.googleapis.com/books/v1/volumes",
+      { params: req.query },
+      "&key=AIzaSyAach5NdKjvMMncgtv1mlJLdNre9y2Ppvw"
+    )
     .then(({ data: { items } }) => res.json(items))
     .catch((err) => res.status(422).json(err));
 });
@@ -15,6 +19,6 @@ router
   .get(booksController.findAll)
   .post(booksController.create);
 
-router.route("/savedBooks/:googleId").delete(booksController.remove);
+router.route("/savedBooks/:bookId").delete(booksController.remove);
 
 module.exports = router;

@@ -1,16 +1,16 @@
 import axios from "axios";
 
 export default {
-  getBooks: () => {
-    return axios.get("/api/books");
+  getBooks: function (query) {
+    return axios.get("./api/books", { params: { q: query } });
   },
-  searchBooks: (title) => {
-    return axios.post("/search", { title: title });
+  getSavedBooks: function () {
+    return axios.get("/api/savedBooks");
   },
-  addBookToDB: (bookData) => {
-    return axios.post("/api/books", bookData);
+  saveBook: function (bookData) {
+    return axios.post("./api/savedBooks", bookData);
   },
-  deleteBook: (id) => {
-    return axios.delete(`/api/books/${id}`);
+  deleteSavedBook: function (bookId) {
+    return axios.delete(`/api/savedBooks/${bookId}`);
   },
 };

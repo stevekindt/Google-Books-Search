@@ -1,35 +1,74 @@
-import React from "react";
-import ResultsContainer from "../components/ResultsContainer";
+import React, { Component } from "react";
+import { Row, Container } from "../components/Grid";
+import { BookList, BookListItem } from "../components/BookList";
 import API from "../utils/API";
 
-class Saved extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      savedBooks: [],
-    };
+class Saved extends Component {
+
+  state = {
+    savedBooks: [],
+    screenWidth: window.innerWidth
   }
 
-  componentWillMount() {
-    API.getBooks()
-      .then((response) => {
-        this.setState({ savedBooks: response.data });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  componentDidMount() {
+    this.loadSavedBooks();
+    window.addEventListener('resize', this.updateDimensions);
   }
+
+  updateDimensions = () => {
+    this.setState({screenWidth: window.innerWidth}, () => console.log(this.state.screenWidth))
+  }
+
+  loadSavedBooks = () => {
+    API.getSavedBooks()
+      .then(res =>
+        this.setState({ savedBooks: res.data }))
+  }
+
+  deleteSavedBook = (event, bookId) => {
+    event.preventDefault();
+    API.deleteSavedBook(bookId)
+      .then(res => this.loadSavedBooks())
+      .catch(err => console.log(err));
+  };
 
   render() {
-    console.log(this.state.savedBooks);
     return (
-      <main>
-        <ResultsContainer
-          savedBooks={this.state.savedBooks}
-          path={this.props.match.path}
-        />
-      </main>
-    );
+      <Container>
+        <Row>
+          <div className="col rounded text-center bg-info mt-4 mb-4 p-4">
+            <h1>Saved Books</h1>
+          </div>
+        </Row>
+        <Row>
+          <div className="col border border-rounded p-3 mb-4">
+            <h4>Saved Books</h4>
+            {!this.state.savedBooks.length ? (
+              <h6 className="text-center">No books saved to display</h6>
+            ) : (
+                <BookList>
+                  {this.state.savedBooks.map(book => {
+                    return (
+                      <BookListItem
+                        key={book.bookId}
+                        bookId={book.bookId}
+                        title={book.title}
+                        authors={book.authors}
+                        description={book.description}
+                        image={book.image}
+                        link={book.link}
+                        saved={true}
+                        clickEvent={this.deleteSavedBook}
+                        screenWidth={this.state.screenWidth}
+                      />
+                    );
+                  })}
+                </BookList>
+              )}
+          </div>
+        </Row>
+      </Container>
+    )
   }
 }
 
