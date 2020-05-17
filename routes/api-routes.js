@@ -15,6 +15,7 @@ module.exports = function (app) {
   });
 
   app.post("/search", (req, res) => {
+    console.log(req.body);
     let bookTitle = req.body.title.replace(/\s/g, "+");
     axios
       .get(
