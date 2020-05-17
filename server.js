@@ -1,7 +1,9 @@
-require("dotenv").config();
 const express = require("express");
-const app = express();
+const mongoose = require("mongoose");
+const path = require("path");
 const PORT = process.env.PORT || 3001;
+const app = express();
+const routes = require("./routes/api-routes");
 
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
@@ -10,19 +12,21 @@ app.use(express.json());
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
-const mongoose = require("mongoose");
-const mongoURL =
-  process.env.PROD_MONGODB || "mongodb://localhost/googlebooksearch";
-mongoose
-  .connect(mongoURL, { useNewUrlParser: true })
-  .then(() => {
-    console.log("🗄 ==> Successfully connected to mongoDB.");
-  })
-  .catch((err) => {
-    console.log(`Error connecting to mongoDB: ${err}`);
-  });
 
-require("./routes/api-routes")(app);
+// Define API routes here
+app.use("/api", routes);
+
+//Connect to MongoDb
+mongoose.connect(
+  process.env.MONGODB_URI || "mongodb://localhost/googlebooksearch",
+  { useUnifiedTopology: true }
+);
+
+// Send every other request to the React app
+// Define any API routes before this runs
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+});
 
 app.listen(PORT, () => {
   console.log(`🌎 ==> API server now on port ${PORT}!`);

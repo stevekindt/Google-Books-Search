@@ -1,57 +1,20 @@
-require("dotenv").config();
 const axios = require("axios");
+const router = require("express").Router();
+const booksController = require("../controllers/booksController");
 const db = require("../models");
-const path = require("path");
 
-module.exports = function (app) {
-  app.get("/api/books", (req, res) => {
-    db.Book.find()
-      .then((booksData) => {
-        res.json(booksData);
-      })
-      .catch((err) => {
-        res.json({ error: err });
-      });
-  });
+router.get("/books", (req, res) => {
+  axios
+    .get("https://www.googleapis.com/books/v1/volumes", { params: req.query })
+    .then(({ data: { items } }) => res.json(items))
+    .catch((err) => res.status(422).json(err));
+});
 
-  app.post("/search", (req, res) => {
-    console.log(req.body);
-    let bookTitle = req.body.title.replace(/\s/g, "+");
-    axios
-      .get(
-        `https://www.googleapis.com/books/v1/volumes?q=${bookTitle}&key=${process.env.GBOOKS_KEY}`
-      )
-      .then((response) => {
-        res.json(response.data.items);
-      })
-      .catch((err) => {
-        res.json({ error: error });
-      });
-  });
+router
+  .route("/savedBooks")
+  .get(booksController.findAll)
+  .post(booksController.create);
 
-  app.post("/api/books", (req, res) => {
-    db.Book.create(req.body)
-      .then((response) => {
-        res.json({ successful: response });
-      })
-      .catch((err) => {
-        res.json({ error: err });
-      });
-  });
+router.route("/savedBooks/:googleId").delete(booksController.remove);
 
-  app.delete("/api/books/:id", (req, res) => {
-    db.Book.findByIdAndDelete(req.params.id)
-      .then((response) => {
-        res.json({ successful: response });
-      })
-      .catch((err) => {
-        rres.json({ error: err });
-      });
-  });
-
-  // Send every other request to the React app
-  // Define any API routes before this runs
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/build/index.html"));
-  });
-};
+module.exports = router;
