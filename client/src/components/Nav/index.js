@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Nav() {
   return (
     <nav>
-      <h2>Google Book Search</h2>
+      <h1>Google Book Search</h1>
       <Link to="/">Search</Link>
       <Link to="/saved">Saved</Link>
     </nav>

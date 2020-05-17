@@ -12,7 +12,7 @@ module.exports = {
       .catch((err) => res.status(422).json(err));
   },
   remove: function (req, res) {
-    db.Book.findOne({ googleId: req.params.googleId })
+    db.Book.findOne({ bookId: req.params.bookId })
       .then((dbModel) => dbModel.remove())
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));

@@ -71,15 +71,7 @@ class Search extends Component {
       .catch((err) => console.log(err));
   };
 
-  handleSave = (
-    event,
-    bookId,
-    title,
-    authors,
-    description,
-    link,
-    image,
-  ) => {
+  handleSave = (event, bookId, title, authors, description, link, image) => {
     event.preventDefault();
     API.saveBook({
       bookId,
@@ -96,7 +88,7 @@ class Search extends Component {
       <Container>
         <Row>
           <div className="col rounded text-center bg-secondary mt-4 p-4">
-            <h1>Google Book Search</h1>
+            <h3>Google Book Search</h3>
             <h4>Search for books you're interested in!</h4>
           </div>
         </Row>
